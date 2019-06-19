@@ -47,3 +47,4 @@ for t in xrange(l):
 		print "--------------------------------"
 		print stock_name + " Total Profit: " + formatPrice(total_profit)
 		print "--------------------------------"
+
