@@ -1,8 +1,8 @@
-import tensorflow.keras
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.models import load_model
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.optimizers import Adam
+import keras
+from keras.models import Sequential
+from keras.models import load_model
+from keras.layers import Dense
+from keras.optimizers import Adam
 
 import numpy as np
 import random
@@ -35,7 +35,7 @@ class Agent:
 		return model
 
 	def act(self, state):
-		if not self.is_eval and np.random.rand() <= self.epsilon:
+		if not self.is_eval and random.random() <= self.epsilon:
 			return random.randrange(self.action_size)
 
 		options = self.model.predict(state)
@@ -58,4 +58,3 @@ class Agent:
 
 		if self.epsilon > self.epsilon_min:
 			self.epsilon *= self.epsilon_decay 
-

@@ -28,4 +28,3 @@ def getState(data, t, n):
 		res.append(sigmoid(block[i + 1] - block[i]))
 
 	return np.array([res])
-
