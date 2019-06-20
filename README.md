@@ -8,6 +8,7 @@ python train.py ^GSPC 10 1000
 Then when training finishes (minimum 200 episodes for results):
 ```
 python evaluate.py ^GSPC_2011 model_ep1000
+python evaluate2.py ^GSPC_2011 model_ep1000 2000
 ```
 
 ## Reference
