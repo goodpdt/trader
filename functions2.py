@@ -10,12 +10,28 @@ def formatPrice(n):
 def getStockDataVec(key):
     vec = []
     df = pd.read_excel(r"data/" + key + ".xlsx")
-    print(df.head(15))
-    temp = df.iloc[:, [0, 36, 33, 34, 1, 1, 47]]
+    #print(df.head(15))
+    num = 0 
+    openP = 0
+    highP = 0
+    lowP = 0
+    volume = 0
+    for title in df:
+        if "PRICE HIGH" in title:
+            highP = num
+        elif "PRICE LOW" in title:
+            lowP = num
+        elif "OPENING PRICE" in title:
+            openP = num
+        elif ("TURNOVER BY VOLUME" in title) and (len(title.split("-"))==2) :
+            volume = num
+        num+=1
+            
+    temp = df.iloc[:, [0, openP, highP, lowP, 1, 1, volume]]
     lines = temp.to_numpy()
     #lines = open("data/" + key + ".xlsx", "r").read().splitlines()
 
-    for line in lines[1:]:
+    for line in lines[0:]:
         vec.append(float(line[4]))
 
     return vec
