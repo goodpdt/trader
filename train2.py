@@ -1,5 +1,5 @@
 from agent.agent import Agent
-from functions import *
+from functions2 import *
 import sys
 
 if len(sys.argv) != 4:
