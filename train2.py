@@ -30,11 +30,17 @@ for e in range(episode_count + 1):
 
 		if action == 1: # buy
 			agent.inventory.append(data[t])
+
+			reward = -data[t]*0.004425
+			
 			print("Buy: " + formatPrice(data[t]))
 
 		elif action == 2 and len(agent.inventory) > 0: # sell
 			bought_price = agent.inventory.pop(0)
-			reward = max(data[t] - 0.004425*data[t] - 1.001425*bought_price, 0)
+
+			#reward = max(data[t] - 0.004425*data[t] - 1.001425*bought_price, 0)
+			reward = data[t] - 0.004425*data[t] - 1.001425*bought_price
+			
 			total_profit += data[t] - bought_price
 			print("Sell: " + formatPrice(data[t]) + " | Profit: " + formatPrice(data[t] - bought_price))
 
@@ -51,5 +57,5 @@ for e in range(episode_count + 1):
 			agent.expReplay(batch_size)
 
 	if e % 2 == 0:
-		agent.model.save("models/model_ep" + str(e))
+		agent.model.save("models2/model_ep" + str(e))
 		print("save success")
