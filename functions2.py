@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import math
 
 # prints formatted price
@@ -8,10 +9,14 @@ def formatPrice(n):
 # returns the vector containing stock data from a fixed file
 def getStockDataVec(key):
     vec = []
-    lines = open("data/" + key + ".csv", "r").read().splitlines()
+    df = pd.read_excel(r"data/" + key + ".xlsx")
+    print(df.head(15))
+    temp = df.iloc[:, [0, 36, 33, 34, 1, 1, 47]]
+    lines = temp.to_numpy()
+    #lines = open("data/" + key + ".xlsx", "r").read().splitlines()
 
     for line in lines[1:]:
-        vec.append(float(line.split(",")[4]))
+        vec.append(float(line[4]))
 
     return vec
 

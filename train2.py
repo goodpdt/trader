@@ -15,19 +15,21 @@ l = len(data) - 1
 batch_size = 32
 
 for e in range(episode_count + 1):
-	print("Episode " + str(e) + "/" + str(episode_count))
-	state = getState(data, 0, window_size + 1)
+    print("Episode " + str(e) + "/" + str(episode_count))
+    state = getState(data, 0, window_size + 1)
 
-	total_profit = 0
-	agent.inventory = []
+    total_profit = 0
+    agent.inventory = []
 
-	for t in range(l):
-		action = agent.act(state)
+    for t in range(l):
+        print(data[t])
+        action = agent.act(state)
 
-		# sit
-		next_state = getState(data, t + 1, window_size + 1)
-		reward = 0
+        # sit
+        next_state = getState(data, t + 1, window_size + 1)
+        reward = 0
 
+<<<<<<< HEAD
 		if action == 1: # buy
 			agent.inventory.append(data[t])
 
@@ -43,19 +45,36 @@ for e in range(episode_count + 1):
 			
 			total_profit += data[t] - bought_price
 			print("Sell: " + formatPrice(data[t]) + " | Profit: " + formatPrice(data[t] - bought_price))
+=======
+        if action == 1: # buy
+            agent.inventory.append(data[t])
+            print("Buy: " + formatPrice(data[t]))
 
-		done = True if t == l - 1 else False
-		agent.memory.append((state, action, reward, next_state, done))
-		state = next_state
+        elif action == 2 and len(agent.inventory) > 0: # sell
+            bought_price = agent.inventory.pop(0)
+            reward = max(data[t] - 0.004425*data[t] - 1.001425*bought_price, 0)
+            total_profit += data[t] - bought_price
+            print("Sell: " + formatPrice(data[t]) + " | Profit: " + formatPrice(data[t] - bought_price))
+>>>>>>> 26872f35e35906a8bfd0d9a7a8f137db093f84b4
 
-		if done:
-			print("--------------------------------")
-			print("Total Profit: " + formatPrice(total_profit))
-			print("--------------------------------")
+        done = True if t == l - 1 else False
+        agent.memory.append((state, action, reward, next_state, done))
+        state = next_state
 
-		if len(agent.memory) > batch_size:
-			agent.expReplay(batch_size)
+        if done:
+            print("--------------------------------")
+            print("Total Profit: " + formatPrice(total_profit))
+            print("--------------------------------")
 
+        if len(agent.memory) > batch_size:
+            agent.expReplay(batch_size)
+
+<<<<<<< HEAD
 	if e % 2 == 0:
 		agent.model.save("models2/model_ep" + str(e))
 		print("save success")
+=======
+    if e % 2 == 0:
+        agent.model.save("models/model_ep" + str(e))
+        print("save success")
+>>>>>>> 26872f35e35906a8bfd0d9a7a8f137db093f84b4
