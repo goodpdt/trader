@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 #-1 = close GPU
@@ -16,8 +17,9 @@ if len(sys.argv) != 4:
     exit()
 
 stock_name_dash, model_name, money = sys.argv[1], sys.argv[2], float(sys.argv[3])
+image_name = stock_name_dash
 stock_name = stock_name_dash.split("-")[0]
-model = load_model("models2/" + model_name)
+model = load_model("models_company/" + model_name)
 window_size = model.layers[0].input.shape.as_list()[1]
 print("windows size = ",window_size)
 print("Money = ",money)
@@ -31,6 +33,14 @@ tax = 0
 buy_num = 0
 sell_num = 0
 sit_num = 0
+
+#draw
+list_x = []
+list_y = []
+list_sell_x = []
+list_sell_y = []
+list_buy_x = []
+list_buy_y = []
 
 agent = Agent(window_size, False, model_name) #true false!
 
@@ -62,6 +72,10 @@ for t in range(l):
     next_state = getState(data, t + 1, window_size + 1)	
     reward = 0
     #print("data[t] is ",data[t])
+    #draw
+    list_x.append(t)
+    list_y.append(data[t])
+
     if action == 1 and money > data[t]: # buy
         buy_num+=1
         agent.inventory.append(data[t])
@@ -72,6 +86,10 @@ for t in range(l):
 
         fee += 0.001425*data[t]
         print("Remaining money: ",money)
+
+        #draw
+        list_buy_x.append(t)
+        list_buy_y.append(data[t])
 
     elif action == 2 and len(agent.inventory) > 0: # sell
         sell_num+=1
@@ -89,6 +107,10 @@ for t in range(l):
         tax += 0.003*data[t]
         print("Remaining money: ",money)
         #print("inventory = ",len(agent.inventory))
+        #draw
+        list_sell_x.append(t)
+        list_sell_y.append(data[t])
+
     else:
         print("sit: ",action)
         sit_num+=1
@@ -146,3 +168,13 @@ for t in range(l):
         
         else:
             print("some error")
+
+        #draw
+        plt.plot(list_x,list_y,'k')
+        plt.plot(list_buy_x,list_buy_y,'go')
+        plt.plot(list_sell_x,list_sell_y,'ro')
+        plt.ylabel('Stock price')
+        plt.xlabel('time')
+        #plt.show()
+        #save stock_name+png
+        plt.savefig('image/' + image_name + '.png')

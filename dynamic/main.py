@@ -1,14 +1,16 @@
+import matplotlib.pyplot as plt
 import subprocess
 import pandas as pd
 import csv
 
 #run evaluate2.py
 def call(stock_name, model, money):
-    print("python3 evaluate2.py {} {} {}".format(stock_name, model, money))
-    subprocess.call("python3 evaluate2.py {} {} {}".format(stock_name, model, money), shell=True)
+    print("python evaluate2.py {} {} {}".format(stock_name, model, money))
+    #subprocess.call("python3 evaluate2.py {} {} {}".format(stock_name, model, money), shell=True)
+    subprocess.call("python evaluate2.py {} {} {}".format(stock_name, model, money), shell=True)
 
 months = ""
-with open("./data/percentage.csv") as f:
+with open("./data/percentage.csv") as f: #input data
     months = csv.reader(f, delimiter=',', quoting=csv.QUOTE_NONE)
     mon = 1
     for row in months:
@@ -42,7 +44,7 @@ with open("./data/percentage.csv") as f:
             if i%2 == 0:
                 print(row[i+1])
                 money = float(remain_total_money) * float(row[i+1])
-                call("_"+row[i]+".TW-"+str(mon), "model_ep10", money)
+                call("_"+row[i]+".TW-"+str(mon), "model_"+row[i], money)
                 
         mon += 1
 
@@ -63,3 +65,13 @@ with open("./data/percentage.csv") as f:
         mon += 1
 print(total)
 
+#draw
+y = total
+x = []
+for i in range(1,len(total)+1):
+    x.append(i)
+plt.plot(x,y,'k')
+plt.ylabel('Money')
+plt.xlabel('Month')
+
+plt.savefig('result.png')
